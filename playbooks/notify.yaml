@@ -1,0 +1,21 @@
+--- # Notification and Handling events
+- hosts: localhost
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+  gather_facts: yes
+  connection: ssh
+  tasks:
+  - name: Install nginx Web server
+    yum:
+      name: nginx
+      state: latest
+    notify:
+    - Enable and start the nginx service
+      #The handlers is only called if notify fires: So the nginx service will be restarted only if it was firstly installed
+  handlers:
+  - name: Enable and start the nginx service
+    service:
+      name: nginx
+      enabled: yes
+      state: restarted
